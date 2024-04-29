@@ -7,6 +7,7 @@ from appium.options.common.base import AppiumOptions
 from appium.webdriver.common.appiumby import AppiumBy
 
 API_KEY = os.environ["API_KEY"]
+RUNNER_API_KEY = = os.environ["RUNNER_API_KEY"]
 token = API_KEY
 
 #use ocr python enviornment
@@ -19,7 +20,7 @@ class SimpleTests(threading.Thread):
     def run(self):
         device_id = self.argument
         host = self.argument2    
-        driver_url = f"https://appium-dev.headspin.io:443/v0/{token}/wd/hub"
+        driver_url = f"https://appium-dev.headspin.io:443/v0/{RUNNER_API_KEY}/wd/hub"
         options = AppiumOptions()
         options.load_capabilities({
         "automationName": "xcuitest",
