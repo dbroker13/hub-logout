@@ -21,17 +21,23 @@ class SimpleTests(threading.Thread):
 
     def run(self):
         device_id = self.argument
-        host = self.argument2    
+        host = self.argument2 
+        print("Starting connection for" + device_id)   
         driver_url = f"https://appium-dev.headspin.io:443/v0/{RUNNER_API_KEY}/wd/hub"
-        options = AppiumOptions()
-        options.load_capabilities({
-        "automationName": "xcuitest",
-        "platformName": "ios",
-        "deviceName": "iPhone",
-        "bundleId": "com.air-watch.agent",
-        "udid": device_id
-    })
-        driver = webdriver.Remote(driver_url, options.to_capabilities())
+        try:
+            options = AppiumOptions()
+            options.load_capabilities({
+            "automationName": "xcuitest",
+            "platformName": "ios",
+            "deviceName": "iPhone",
+            "bundleId": "com.air-watch.agent",
+            "udid": device_id,
+            "headspin:retryNewSessionFailure": False,
+        })
+            driver = webdriver.Remote(driver_url, options.to_capabilities())
+        except Exception as e:
+            print("DRIVER CONNECTION FAILED FOR DEVICE " + device_id)
+            return
 
         driver.implicitly_wait(20)
 
@@ -52,12 +58,14 @@ class SimpleTests(threading.Thread):
         except:
             driver.quit()
             print ("Failed to logout or user not logged in " + device_id)
-        
-        driver.terminate_app("com.air-watch.agent")
+        try:
+            driver.terminate_app("com.air-watch.agent")
 
-        print ("Done")
+            print ("Done")
 
-        driver.quit()
+            driver.quit()
+        except:
+            print("Failed to quit the last time")
 
 
 json_url = "https://api-dev.headspin.io/v0/devices/device_type:ios/information"
@@ -86,6 +94,7 @@ if 'devices' in json_data:
         if 'safari' not in device_id and 'chrome' not in device_id and 'opera' not in device_id and 'firefox' not in device_id and 'edge' not in device_id:
             appiumThread = SimpleTests(device_id, hostname)
             appiumThread.start()
+            # appiumThread.start()
         
 else:
     print("'devices' key not found in the JSON data.")
