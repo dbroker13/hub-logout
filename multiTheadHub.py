@@ -9,6 +9,8 @@ from appium.webdriver.common.appiumby import AppiumBy
 API_KEY = os.environ["API_KEY"]
 RUNNER_API_KEY = os.environ["RUNNER_API_KEY"]
 token = API_KEY
+print(token)
+print(RUNNER_API_KEY)
 
 #use ocr python enviornment
 class SimpleTests(threading.Thread):
