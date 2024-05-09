@@ -33,6 +33,8 @@ class SimpleTests(threading.Thread):
             "bundleId": "com.air-watch.agent",
             "udid": device_id,
             "headspin:retryNewSessionFailure": False,
+            "headspin:waitForDeviceOnlineTimeout": 1500,
+            "appium:newCommandTimeout": 60    
         })
             driver = webdriver.Remote(driver_url, options.to_capabilities())
         except Exception as e:
@@ -75,7 +77,7 @@ json_data = requests.get(json_url, headers=headers).json()
 
 holder = json_data['devices'].copy()
 for device_obj in holder:
-    if device_obj["owner_email"] is not None:
+    if device_obj["owner_email"] is None:
         json_data['devices'].remove(device_obj)
         print("removing " + device_obj['device_id'])
 
