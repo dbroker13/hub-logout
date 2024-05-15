@@ -18,7 +18,7 @@ class SimpleTests(threading.Thread):
         super(SimpleTests, self).__init__()
         self.argument = argument
         self.argument2 = argument2
-
+#Device will wait every 5 minutes
     def run(self):
         device_id = self.argument
         host = self.argument2 
@@ -33,7 +33,7 @@ class SimpleTests(threading.Thread):
             "bundleId": "com.air-watch.agent",
             "udid": device_id,
             "headspin:retryNewSessionFailure": False,
-            "headspin:waitForDeviceOnlineTimeout": 1500,
+            "headspin:waitForDeviceOnlineTimeout": 300,
             "appium:newCommandTimeout": 60    
         })
             driver = webdriver.Remote(driver_url, options.to_capabilities())
